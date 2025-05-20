@@ -68,21 +68,32 @@ function SetupLoad() {
     let draggedShip = null;
     let draggedLength = 0;
     let isVertical = false;
+    let dragOffsetIndex = 0; // где је брод ухваћен
 
     const board1 = document.getElementById("boardhtml");
     document.getElementById('playerName').textContent = localStorage.getItem('nameF') + " ";
     createBoard(board1);
 
-    // Ispravan selektor!
     document.querySelectorAll(".ship").forEach(ship => {
         ship.addEventListener("dragstart", e => {
             draggedShip = e.target;
             draggedLength = parseInt(draggedShip.dataset.length);
             isVertical = draggedShip.classList.contains("vertical");
+
+            const rect = draggedShip.getBoundingClientRect();
+            const mouseOffsetX = e.clientX - rect.left;
+            const mouseOffsetY = e.clientY - rect.top;
+
+            if (isVertical) {
+                const partHeight = rect.height / draggedLength;
+                dragOffsetIndex = Math.floor(mouseOffsetY / partHeight);
+            } else {
+                const partWidth = rect.width / draggedLength;
+                dragOffsetIndex = Math.floor(mouseOffsetX / partWidth);
+            }
         });
     });
 
-    // Drag & drop na board (samo jednom, van petlje)
     if (board1) {
         board1.addEventListener("dragover", e => e.preventDefault());
 
@@ -98,10 +109,16 @@ function SetupLoad() {
             const positions = [];
 
             for (let i = 0; i < draggedLength; i++) {
-                let pos = isVertical ? index + i * 10 : index + i;
+                let pos = isVertical 
+                    ? index - dragOffsetIndex * 10 + i * 10
+                    : index - dragOffsetIndex + i;
 
-                // Provera granica
-                if (pos >= 100 || (isVertical && pos % 10 !== index % 10) || (!isVertical && Math.floor(pos / 10) !== Math.floor(index / 10))) {
+                // Проверa граница
+                if (
+                    pos < 0 || pos >= 100 ||
+                    (isVertical && pos % 10 !== index % 10) ||
+                    (!isVertical && Math.floor(pos / 10) !== Math.floor(index / 10))
+                ) {
                     valid = false;
                     break;
                 }
@@ -118,11 +135,12 @@ function SetupLoad() {
                 positions.forEach(p => {
                     cells[p].classList.add("occupied");
                 });
-                if (draggedShip) draggedShip.remove(); // uklanja brod iz hangara
+                if (draggedShip) draggedShip.remove();
             }
         });
     }
 }
+
 function rotirajbrodove()
 {
     document.querySelectorAll(".ship").forEach(ship => {
@@ -145,27 +163,7 @@ function rotirajbrodove()
     });
 }
 
-    /**/
-
-
-/*document.addEventListener("DOMContentLoaded", () => {
-    const board1 = document.getElementById("board1");
-    const board2 = document.getElementById("board2");
-
-    function createBoard(board) {
-        for (let i = 0; i < 100; i++) {
-            const cell = document.createElement("div");
-            cell.classList.add("cell");
-            cell.dataset.index = i;
-            board.appendChild(cell);
-        }
-    }
-
-    
-    createBoard(board1);
-    createBoard(board2);
-});*/
-/*
+/*    
 let placingPlayer = 1;
 function updateBoardVisibility() {
     if (placingPlayer === 1) {
