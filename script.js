@@ -24,7 +24,7 @@ function input()
         window.location.href = "gameSetup.html";
     }
 }
-var boardF =[
+let boardF =[
     [
     [0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0,0],
@@ -68,11 +68,12 @@ function SetupLoad() {
     let draggedShip = null;
     let draggedLength = 0;
     let isVertical = false;
-    let dragOffsetIndex = 0; // где је брод ухваћен
+    let dragOffsetIndex = 0;
+    let shipNumber = 5;
 
-    const board1 = document.getElementById("boardhtml");
+    const board = document.getElementById("boardhtml");
     document.getElementById('playerName').textContent = localStorage.getItem('nameF') + " ";
-    createBoard(board1);
+    createBoard(board);
 
     document.querySelectorAll(".ship").forEach(ship => {
         ship.addEventListener("dragstart", e => {
@@ -94,16 +95,16 @@ function SetupLoad() {
         });
     });
 
-    if (board1) {
-        board1.addEventListener("dragover", e => e.preventDefault());
+    if (board) {
+        board.addEventListener("dragover", e => e.preventDefault());
 
-        board1.addEventListener("drop", e => {
+        board.addEventListener("drop", e => {
             e.preventDefault();
             const cell = e.target;
             if (!cell.classList.contains("cell")) return;
 
             const index = parseInt(cell.dataset.index);
-            const cells = board1.querySelectorAll(".cell");
+            const cells = board.querySelectorAll(".cell");
 
             let valid = true;
             const positions = [];
@@ -113,7 +114,7 @@ function SetupLoad() {
                     ? index - dragOffsetIndex * 10 + i * 10
                     : index - dragOffsetIndex + i;
 
-                // Проверa граница
+               
                 if (
                     pos < 0 || pos >= 100 ||
                     (isVertical && pos % 10 !== index % 10) ||
@@ -134,8 +135,26 @@ function SetupLoad() {
             if (valid) {
                 positions.forEach(p => {
                     cells[p].classList.add("occupied");
+                    if(playerNow = 1)
+                    {
+                        let x = p%10;
+                        let y = parseInt(p/10);
+                        console.log(boardF);
+                        console.log(x,y);
+                        //boardF[y][x] = 1; pravi gresku pri dodavanju drugog broda
+                    }
                 });
                 if (draggedShip) draggedShip.remove();
+                shipNumber--;
+                if(shipNumber == 0)
+                {
+                    document.getElementById('playerName').textContent = localStorage.getItem('nameS') + " ";
+                    for(let i = 0; i < 100; i++)
+                    {
+                        cells[i].classList.remove("occupied");
+                    }
+                    playerNow = 2;
+                }
             }
         });
     }
