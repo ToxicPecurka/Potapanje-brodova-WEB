@@ -25,7 +25,7 @@ function input()
     }
 }
 let boardF =[
-    [
+    
     [0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0,0],
@@ -36,10 +36,9 @@ let boardF =[
     [0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0,0]
-    ]
 ]
 var boardS =[
-    [
+    
     [0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0,0],
@@ -50,12 +49,11 @@ var boardS =[
     [0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0,0]
-    ]
 ]
 
 let playerNow = 1;
 
-//document.getElementById('player2Name').textContent = localStorage.getItem('nameS') ;
+
 function createBoard(board) {
         for (let i = 0; i < 100; i++) {
             const cell = document.createElement("div");
@@ -135,26 +133,69 @@ function SetupLoad() {
             if (valid) {
                 positions.forEach(p => {
                     cells[p].classList.add("occupied");
-                    if(playerNow = 1)
+                    if(playerNow == 1)
                     {
                         let x = p%10;
                         let y = parseInt(p/10);
-                        console.log(boardF);
-                        console.log(x,y);
-                        //boardF[y][x] = 1; pravi gresku pri dodavanju drugog broda
+                        boardF[y][x] = 1;
                     }
+                    else if(playerNow == 2)
+                    {
+                        let x = p%10;
+                        let y = parseInt(p/10);
+                        boardS[y][x] = 1;
+                    }
+
                 });
                 if (draggedShip) draggedShip.remove();
                 shipNumber--;
-                if(shipNumber == 0)
+                if(shipNumber == 0 && playerNow == 1 )
                 {
+                    playerNow = 2;
                     document.getElementById('playerName').textContent = localStorage.getItem('nameS') + " ";
                     for(let i = 0; i < 100; i++)
                     {
                         cells[i].classList.remove("occupied");
                     }
-                    playerNow = 2;
+                    
+                    const shipsDiv = document.querySelector("#ships .d-flex.gap-2.flex-wrap.justify-content-center.w-100");
+                    if(shipsDiv) {
+                        shipsDiv.innerHTML = `
+                            <div class="ship" draggable="true" data-length="5" style="width: 150px; height: 30px; background: #888; border-radius: 5px;"></div>
+                            <div class="ship" draggable="true" data-length="4" style="width: 120px; height: 30px; background: #888; border-radius: 5px;"></div>
+                            <div class="ship" draggable="true" data-length="3" style="width: 90px; height: 30px; background: #888; border-radius: 5px;"></div>
+                            <div class="ship" draggable="true" data-length="2" style="width: 60px; height: 30px; background: #888; border-radius: 5px;"></div>
+                            <div class="ship" draggable="true" data-length="2" style="width: 60px; height: 30px; background: #888; border-radius: 5px;"></div>
+                        `;
+                        
+                        document.querySelectorAll(".ship").forEach(ship => {
+                            ship.addEventListener("dragstart", e => {
+                                draggedShip = e.target;
+                                draggedLength = parseInt(draggedShip.dataset.length);
+                                isVertical = draggedShip.classList.contains("vertical");
+
+                                const rect = draggedShip.getBoundingClientRect();
+                                const mouseOffsetX = e.clientX - rect.left;
+                                const mouseOffsetY = e.clientY - rect.top;
+
+                                if (isVertical) {
+                                    const partHeight = rect.height / draggedLength;
+                                    dragOffsetIndex = Math.floor(mouseOffsetY / partHeight);
+                                } else {
+                                    const partWidth = rect.width / draggedLength;
+                                    dragOffsetIndex = Math.floor(mouseOffsetX / partWidth);
+                                }
+                            });
+                        });
+                    }
+                    shipNumber = 5; 
                 }
+                else if(shipNumber == 0 && playerNow == 2)
+                {
+                    window.location.href = "gamePage.html";
+                }
+
+                
             }
         });
     }
@@ -166,7 +207,7 @@ function rotirajbrodove()
     
         if(ship.classList.contains("vertical"))
         {
-            // Change ship to horizontal
+            
             ship.style.width = `${parseInt(ship.style.height)}px`;
             ship.style.height = '30px';
             
@@ -180,6 +221,17 @@ function rotirajbrodove()
         }
         
     });
+}
+function gameLoad()
+{
+    document.getElementById('player1').textContent = localStorage.getItem('nameF') + ":";
+    document.getElementById('player2').textContent = localStorage.getItem('nameS') + ":";
+
+    const board1 = document.getElementById("board1");
+    const board2= document.getElementById("board2");
+    createBoard(board1);
+    createBoard(board2);
+    
 }
 
 /*    
