@@ -26,3 +26,9 @@
   writing-mode: vertical-lr;
   transform: rotate(180deg);
 }
+.cell.hittedShip{
+  background-color: #a5149c;
+}
+.cell.miss{
+  background-color: aqua;
+}

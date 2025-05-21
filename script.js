@@ -192,9 +192,11 @@ function SetupLoad() {
                 }
                 else if(shipNumber == 0 && playerNow == 2)
                 {
+                    localStorage.setItem("boardF", JSON.stringify(boardF));
+                    localStorage.setItem("boardS", JSON.stringify(boardS));
                     window.location.href = "gamePage.html";
                 }
-
+                
                 
             }
         });
@@ -222,8 +224,39 @@ function rotirajbrodove()
         
     });
 }
+function sakriBoard(board)
+{
+    board.querySelectorAll(".cell").forEach(cell => cell.classList.remove("occupied"));
+
+}
+function prikaziBoard(board,matrix) {
+    console.log(boardF);
+    const cells = board.querySelectorAll(".cell");
+    for (let i = 0; i < 100; i++) {
+        let x = i % 10;
+        let y = Math.floor(i / 10);
+            if (matrix[y][x] == 1) {
+                cells[i].classList.add("occupied");
+            }
+        
+    }
+}
+function matricaPrazna(matrix) {
+    for (let y = 0; y < 10; y++) {
+        for (let x = 0; x < 10; x++) {
+            if (matrix[y][x] === 1) {
+                return false; 
+            }
+        }
+    }
+    return true; 
+}
 function gameLoad()
 {
+    let playerNow = 1;
+    let boardF = JSON.parse(localStorage.getItem("boardF"));
+    let boardS = JSON.parse(localStorage.getItem("boardS"));
+                            console.log(boardF);
     document.getElementById('player1').textContent = localStorage.getItem('nameF') + ":";
     document.getElementById('player2').textContent = localStorage.getItem('nameS') + ":";
 
@@ -231,19 +264,60 @@ function gameLoad()
     const board2= document.getElementById("board2");
     createBoard(board1);
     createBoard(board2);
+
     
+    prikaziBoard(board1,boardF);
+
+    // Za tablu igrača 1
+    document.querySelectorAll("#board1 .cell").forEach(cell => {
+        cell.addEventListener("click", e => {
+            if(playerNow == 2) {
+                let index = parseInt(cell.dataset.index);
+                let x = index % 10;
+                let y = Math.floor(index / 10);
+                if(boardF[y][x] === 1) {
+                    cell.classList.add("hittedShip");
+                    boardF[y][x] = 0; 
+                    if(matricaPrazna(boardF)) {
+                        alert(localStorage.getItem('nameS') + " je pobedio!");
+                        // Opciono: window.location.reload(); ili window.location.href = "pocetna.html";
+                    }
+                } else {
+                    cell.classList.add("miss");
+                    playerNow = 1;
+                    prikaziBoard(board1,boardF);
+                    sakriBoard(board2);
+                }
+                
+            }
+        });
+    });
+
+    // Za tablu igrača 2
+    document.querySelectorAll("#board2 .cell").forEach(cell => {
+        cell.addEventListener("click", e => {
+            if(playerNow == 1) {
+                let index = parseInt(cell.dataset.index);
+                let x = index % 10;
+                let y = Math.floor(index / 10);
+                if(boardS[y][x] === 1) {
+                
+                    cell.classList.add("hittedShip");
+                    boardS[y][x] = 0; 
+                    if(matricaPrazna(boardS)) {
+                        alert(localStorage.getItem('nameF') + " je pobedio!");
+                        // Opciono: window.location.reload(); ili window.location.href = "pocetna.html";
+                    }
+                } else {
+                    cell.classList.add("miss");
+                    playerNow = 2;
+                    prikaziBoard(board2,boardS);
+                    sakriBoard(board1);
+                }
+                
+            }
+        });
+    });
 }
 
-/*    
-let placingPlayer = 1;
-function updateBoardVisibility() {
-    if (placingPlayer === 1) {
-        document.getElementById('board2').style.display = 'none';
-        document.getElementById('board1').style.display = 'center';
-    } else {
-        document.getElementById('board1').style.display = 'none';
-        document.getElementById('player2Area').style.display = 'flex';
-    }
-}
-updateBoardVisibility();
-*/
+
