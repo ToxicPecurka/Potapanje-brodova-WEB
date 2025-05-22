@@ -3,6 +3,7 @@ function pocetak()
     localStorage.removeItem("nameF");
     localStorage.removeItem("nameS");
 }
+
 function input()
 {
     let name1 = document.getElementById("firstPlayer");
@@ -11,57 +12,40 @@ function input()
     let nameF = name1.value;
     let nameS = name2.value;
 
-    let pattern = /^\w{3,15}$/ // Regularni izrazi (regex) za proveru duzine input-a
+    let pattern = /^\w{3,15}$/;
 
     if (!nameF.match(pattern) || !nameS.match(pattern)) {
         alert("Ime mora biti duzine 3 karaktera, ali do 15 karaktera i sme sadrzati iskljucivo slova, brojeve i donje crte.")
         name1.value = "";
         name2.value = "";
-    }
-    else {
+    } else {
         localStorage.setItem("nameF", nameF);
         localStorage.setItem("nameS", nameS);
         window.location.href = "gameSetup.html";
     }
 }
-let boardF =[
-    
-    [0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0]
-]
-var boardS =[
-    
-    [0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0]
-]
 
+let boardF = Array(10).fill(null).map(() => Array(10).fill(0));
+let boardS = Array(10).fill(null).map(() => Array(10).fill(0));
 let playerNow = 1;
 
+function updatePlayerTurnDisplay() {
+    const turnDisplay = document.getElementById('turnDisplay');
+    if (turnDisplay) {
+        turnDisplay.textContent = "Na potezu: " + (playerNow === 1 ? localStorage.getItem('nameF') : localStorage.getItem('nameS'));
+    }
+}
 
 function createBoard(board) {
-        for (let i = 0; i < 100; i++) {
-            const cell = document.createElement("div");
-            cell.classList.add("cell");
-            cell.dataset.index = i;
-            board.appendChild(cell);
-        }
+    board.innerHTML = "";
+    for (let i = 0; i < 100; i++) {
+        const cell = document.createElement("div");
+        cell.classList.add("cell");
+        cell.dataset.index = i;
+        board.appendChild(cell);
     }
+}
+
 function SetupLoad() {
     let draggedShip = null;
     let draggedLength = 0;
@@ -229,16 +213,18 @@ function sakriBoard(board)
     board.querySelectorAll(".cell").forEach(cell => cell.classList.remove("occupied"));
 
 }
-function prikaziBoard(board,matrix) {
-    console.log(boardF);
+function prikaziBoard(board, matrix) {
     const cells = board.querySelectorAll(".cell");
     for (let i = 0; i < 100; i++) {
         let x = i % 10;
         let y = Math.floor(i / 10);
-            if (matrix[y][x] == 1) {
-                cells[i].classList.add("occupied");
-            }
-        
+        cells[i].classList.remove("hittedShip", "miss", "occupied");
+        // Ne prikazuj brodove (occupied) tokom igre!
+        if (matrix[y][x] === 2) {
+            cells[i].classList.add("hittedShip");
+        } else if (matrix[y][x] === -1) {
+            cells[i].classList.add("miss");
+        }
     }
 }
 function matricaPrazna(matrix) {
@@ -251,73 +237,69 @@ function matricaPrazna(matrix) {
     }
     return true; 
 }
-function gameLoad()
-{
-    let playerNow = 1;
+function gameLoad() {
     let boardF = JSON.parse(localStorage.getItem("boardF"));
     let boardS = JSON.parse(localStorage.getItem("boardS"));
-                            console.log(boardF);
+
     document.getElementById('player1').textContent = localStorage.getItem('nameF') + ":";
     document.getElementById('player2').textContent = localStorage.getItem('nameS') + ":";
 
     const board1 = document.getElementById("board1");
-    const board2= document.getElementById("board2");
+    const board2 = document.getElementById("board2");
     createBoard(board1);
     createBoard(board2);
 
-    
-    prikaziBoard(board1,boardF);
+    prikaziBoard(board1, boardF);
+    prikaziBoard(board2, boardS);
+    updatePlayerTurnDisplay();
 
-    // Za tablu igrača 1
     document.querySelectorAll("#board1 .cell").forEach(cell => {
-        cell.addEventListener("click", e => {
-            if(playerNow == 2) {
-                let index = parseInt(cell.dataset.index);
-                let x = index % 10;
-                let y = Math.floor(index / 10);
-                if(boardF[y][x] === 1) {
-                    cell.classList.add("hittedShip");
-                    boardF[y][x] = 0; 
-                    if(matricaPrazna(boardF)) {
-                        alert(localStorage.getItem('nameS') + " je pobedio!");
-                        // Opciono: window.location.reload(); ili window.location.href = "pocetna.html";
-                    }
+        cell.addEventListener("click", () => {
+            if (playerNow === 2) {
+                const index = parseInt(cell.dataset.index);
+                const x = index % 10;
+                const y = Math.floor(index / 10);
+                if (boardF[y][x] === 1) {
+                    boardF[y][x] = 2;
                 } else {
-                    cell.classList.add("miss");
+                    boardF[y][x] = -1;
                     playerNow = 1;
-                    prikaziBoard(board1,boardF);
-                    sakriBoard(board2);
                 }
-                
+                prikaziBoard(board1, boardF);
+                prikaziBoard(board2, boardS);
+                updatePlayerTurnDisplay();
+                if (matricaPrazna(boardF)) {
+                    document.getElementById('winnerModalBody').textContent = localStorage.getItem('nameS') + " je pobedio!";
+                    new bootstrap.Modal(document.getElementById('winnerModal')).show();
+                }
             }
         });
     });
 
-    // Za tablu igrača 2
     document.querySelectorAll("#board2 .cell").forEach(cell => {
-        cell.addEventListener("click", e => {
-            if(playerNow == 1) {
-                let index = parseInt(cell.dataset.index);
-                let x = index % 10;
-                let y = Math.floor(index / 10);
-                if(boardS[y][x] === 1) {
-                
-                    cell.classList.add("hittedShip");
-                    boardS[y][x] = 0; 
-                    if(matricaPrazna(boardS)) {
-                        alert(localStorage.getItem('nameF') + " je pobedio!");
-                        // Opciono: window.location.reload(); ili window.location.href = "pocetna.html";
-                    }
+        cell.addEventListener("click", () => {
+            if (playerNow === 1) {
+                const index = parseInt(cell.dataset.index);
+                const x = index % 10;
+                const y = Math.floor(index / 10);
+                if (boardS[y][x] === 1) {
+                    boardS[y][x] = 2;
                 } else {
-                    cell.classList.add("miss");
+                    boardS[y][x] = -1;
                     playerNow = 2;
-                    prikaziBoard(board2,boardS);
-                    sakriBoard(board1);
                 }
-                
+                prikaziBoard(board1, boardF);
+                prikaziBoard(board2, boardS);
+                updatePlayerTurnDisplay();
+                if (matricaPrazna(boardS)) {
+                    document.getElementById('winnerModalBody').textContent = localStorage.getItem('nameF') + " je pobedio!";
+                    new bootstrap.Modal(document.getElementById('winnerModal')).show();
+                }
             }
         });
     });
 }
 
-
+function reload() {
+    window.location.href = "pocetna.html";
+}
