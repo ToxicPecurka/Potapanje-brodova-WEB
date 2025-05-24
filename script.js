@@ -96,7 +96,6 @@ function SetupLoad() {
                     ? index - dragOffsetIndex * 10 + i * 10
                     : index - dragOffsetIndex + i;
 
-               
                 if (
                     pos < 0 || pos >= 100 ||
                     (isVertical && pos % 10 !== index % 10) ||
@@ -117,31 +116,22 @@ function SetupLoad() {
             if (valid) {
                 positions.forEach(p => {
                     cells[p].classList.add("occupied");
+                    let x = p % 10;
+                    let y = Math.floor(p / 10);
                     if(playerNow == 1)
-                    {
-                        let x = p%10;
-                        let y = parseInt(p/10);
                         boardF[y][x] = 1;
-                    }
-                    else if(playerNow == 2)
-                    {
-                        let x = p%10;
-                        let y = parseInt(p/10);
+                    else
                         boardS[y][x] = 1;
-                    }
-
                 });
                 if (draggedShip) draggedShip.remove();
                 shipNumber--;
-                if(shipNumber == 0 && playerNow == 1 )
-                {
+                if(shipNumber == 0 && playerNow == 1) {
                     playerNow = 2;
                     document.getElementById('playerName').textContent = localStorage.getItem('nameS') + " ";
-                    for(let i = 0; i < 100; i++)
-                    {
+                    for(let i = 0; i < 100; i++) {
                         cells[i].classList.remove("occupied");
                     }
-                    
+
                     const shipsDiv = document.querySelector("#ships .d-flex.gap-2.flex-wrap.justify-content-center.w-100");
                     if(shipsDiv) {
                         shipsDiv.innerHTML = `
@@ -151,7 +141,6 @@ function SetupLoad() {
                             <div class="ship" draggable="true" data-length="2" style="width: 60px; height: 30px; background: #888; border-radius: 5px;"></div>
                             <div class="ship" draggable="true" data-length="2" style="width: 60px; height: 30px; background: #888; border-radius: 5px;"></div>
                         `;
-                        
                         document.querySelectorAll(".ship").forEach(ship => {
                             ship.addEventListener("dragstart", e => {
                                 draggedShip = e.target;
@@ -172,16 +161,12 @@ function SetupLoad() {
                             });
                         });
                     }
-                    shipNumber = 5; 
-                }
-                else if(shipNumber == 0 && playerNow == 2)
-                {
+                    shipNumber = 5;
+                } else if (shipNumber == 0 && playerNow == 2) {
                     localStorage.setItem("boardF", JSON.stringify(boardF));
                     localStorage.setItem("boardS", JSON.stringify(boardS));
                     window.location.href = "gamePage.html";
                 }
-                
-                
             }
         });
     }
@@ -190,36 +175,29 @@ function SetupLoad() {
 function rotirajbrodove()
 {
     document.querySelectorAll(".ship").forEach(ship => {
-    
-        if(ship.classList.contains("vertical"))
-        {
-            
+        if(ship.classList.contains("vertical")) {
             ship.style.width = `${parseInt(ship.style.height)}px`;
             ship.style.height = '30px';
-            
             ship.classList.remove("vertical");
-        }
-        else
-        {
-           ship.style.height = `${parseInt(ship.style.width)}px`;
+        } else {
+            ship.style.height = `${parseInt(ship.style.width)}px`;
             ship.style.width = '30px';
             ship.classList.add("vertical"); 
         }
-        
     });
 }
+
 function sakriBoard(board)
 {
     board.querySelectorAll(".cell").forEach(cell => cell.classList.remove("occupied"));
-
 }
+
 function prikaziBoard(board, matrix) {
     const cells = board.querySelectorAll(".cell");
     for (let i = 0; i < 100; i++) {
         let x = i % 10;
         let y = Math.floor(i / 10);
         cells[i].classList.remove("hittedShip", "miss", "occupied");
-        // Ne prikazuj brodove (occupied) tokom igre!
         if (matrix[y][x] === 2) {
             cells[i].classList.add("hittedShip");
         } else if (matrix[y][x] === -1) {
@@ -227,6 +205,7 @@ function prikaziBoard(board, matrix) {
         }
     }
 }
+
 function matricaPrazna(matrix) {
     for (let y = 0; y < 10; y++) {
         for (let x = 0; x < 10; x++) {
@@ -237,6 +216,7 @@ function matricaPrazna(matrix) {
     }
     return true; 
 }
+
 function gameLoad() {
     let boardF = JSON.parse(localStorage.getItem("boardF"));
     let boardS = JSON.parse(localStorage.getItem("boardS"));
@@ -259,6 +239,8 @@ function gameLoad() {
                 const index = parseInt(cell.dataset.index);
                 const x = index % 10;
                 const y = Math.floor(index / 10);
+                if (boardF[y][x] !== 0 && boardF[y][x] !== 1) return;
+
                 if (boardF[y][x] === 1) {
                     boardF[y][x] = 2;
                 } else {
@@ -282,6 +264,8 @@ function gameLoad() {
                 const index = parseInt(cell.dataset.index);
                 const x = index % 10;
                 const y = Math.floor(index / 10);
+                if (boardS[y][x] !== 0 && boardS[y][x] !== 1) return;
+
                 if (boardS[y][x] === 1) {
                     boardS[y][x] = 2;
                 } else {

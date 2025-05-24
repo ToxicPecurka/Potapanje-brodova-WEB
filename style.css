@@ -1,34 +1,277 @@
+
+body {
+  background: #008DDA url('img/brod.png') no-repeat center bottom;
+  background-size: 50%; 
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.players, #ships {
+  background: #F7EEDD;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.07);
+  padding: 1.2rem 0.5rem;
+  margin: 0.5rem 0;
+  max-width: 370px;
+}
+
+.za_input h1,
+#ships .mb-2, .mb-2.text-center {
+  color: #008DDA;
+  font-weight: 800;
+  font-size: 2rem;
+  letter-spacing: 1px;
+  margin-bottom: 1.5rem !important;
+}
+
+.form-control {
+  border: 2px solid #41C9E2;
+  border-radius: 8px;
+  background: #fff;
+  color: #008DDA;
+  font-weight: 500;
+}
+
+.form-control:focus {
+  border-color: #008DDA;
+  box-shadow: 0 0 0 0.2rem #41c9e240;
+}
+
+/* Global Button Styling */
+button,
+.btn-primary {
+  background: linear-gradient(135deg, #008DDA, #41C9E2);
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  border-radius: 12px;
+  transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  padding: 14px 28px;
+  font-size: 1.2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  text-align: center;
+}
+
+button:hover,
+.btn-primary:hover {
+  background: linear-gradient(135deg, #41C9E2, #ACE2E1);
+  color: #008DDA;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+button:active,
+.btn-primary:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Remove Specific Button Styles */
+.zpaocni button,
+.rotate-btn {
+  all: unset; /* Reset specific styles */
+  display: inline-block; /* Ensure proper button display */
+  background: linear-gradient(135deg, #008DDA, #41C9E2); /* Reapply global styles */
+  border-radius: 12px;
+  padding: 14px 28px;
+  font-size: 1.2rem;
+  color: #fff;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.zpaocni button:hover,
+.rotate-btn:hover {
+  background: linear-gradient(135deg, #41C9E2, #ACE2E1);
+  color: #008DDA;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.zpaocni button:active,
+.rotate-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Specific Styling for "Započni igru" Button */
+.zpaocni button {
+  font-size: 1.3rem;
+  padding: 16px 32px;
+  border-radius: 16px;
+}
+
+/* Specific Styling for "Rotate" Button */
+.rotate-btn {
+  font-size: 1.1rem;
+  padding: 12px 28px;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 10px;
+}
+
+/* GAME BOARD & CELLS - VEĆA TABELA */
 .game-board {
   display: grid;
-  grid-template-columns: repeat(10, 30px);
-  grid-template-rows: repeat(10, 30px);
+  grid-template-columns: repeat(10, 36px);
+  grid-template-rows: repeat(10, 36px);
   gap: 2px;
-  border: 2px solid #000;
-  background-color: #eef;
+  border: 3px solid #008DDA;
+  background-color: #ACE2E1;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.07);
+  margin-bottom: 1rem;
 }
 
 .cell {
-  width: 30px;
-  height: 30px;
-  background-color: rgb(219, 56, 6);
-  border: 1px solid rgb(216, 213, 212);
+  width: 36px;
+  height: 36px;
+  background-color: #008DDA;
+  border: 1px solid #F7EEDD;
+  position: relative;
+  transition: background-color 0.3s ease;
+  border-radius: 6px;
 }
 
 .cell.hovered {
-    background-color: #aaf;
+  background-color: #41C9E2;
 }
 
 .cell.occupied {
-  background-color: #444;
+  background-color: #444; /* koristi se SAMO u setup fazi */
 }
 
 .ship.vertical {
   writing-mode: vertical-lr;
   transform: rotate(180deg);
 }
-.cell.hittedShip{
-  background-color: #a5149c;
+
+/* BRODOVI U HANGARU - ISTA VELIČINA KAO ĆELIJE */
+.ship {
+  background: #888 !important;
+  border-radius: 6px;
+  border: 2px solid #008DDA;
+  width: 36px;
+  height: 36px;
+  opacity: 0.97;
+  margin-bottom: 6px;
+  box-shadow: 0 2px 8px #41C9E220;
+  transition: box-shadow 0.2s;
 }
-.cell.miss{
-  background-color: aqua;
+
+/* Prilagodi brodove u hangaru po dužini */
+.ship[data-length="5"] { width: 180px; }
+.ship[data-length="4"] { width: 144px; }
+.ship[data-length="3"] { width: 108px; }
+.ship[data-length="2"] { width: 72px; }
+
+/* POGODAK — crvena tačka */
+.cell.hittedShip {
+  background-color: #008DDA;
+}
+.cell.hittedShip::after {
+  content: '';
+  display: block;
+  width: 16px;
+  height: 16px;
+  background-color: red;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* PROMAŠAJ — posivljena ćelija */
+.cell.miss {
+  background-color: #ccc;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1200px) {
+  .game-board {
+    grid-template-columns: repeat(10, 38px);
+    grid-template-rows: repeat(10, 38px);
+  }
+  .cell,
+  .ship {
+    width: 38px;
+    height: 38px;
+  }
+}
+
+@media (max-width: 900px) {
+  .game-board {
+    grid-template-columns: repeat(10, 24px);
+    grid-template-rows: repeat(10, 24px);
+  }
+  .cell {
+    width: 24px;
+    height: 24px;
+  }
+  .ship {
+    height: 24px;
+    border-width: 1.5px;
+  }
+  .ship[data-length="5"] { width: 120px; }
+  .ship[data-length="4"] { width: 96px; }
+  .ship[data-length="3"] { width: 72px; }
+  .ship[data-length="2"] { width: 48px; }
+  .rotate-btn {
+    font-size: 1rem;
+    padding: 7px 16px;
+  }
+}
+
+/* Modal Styling */
+.modal-content {
+  background-color: #F7EEDD;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+  background-color: #008DDA;
+  color: #fff;
+  border-bottom: none;
+  border-radius: 12px 12px 0 0;
+}
+
+.modal-title {
+  font-weight: 700;
+  font-size: 1.5rem;
+}
+
+.modal-body {
+  color: #008DDA;
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+.modal-footer {
+  border-top: none;
+  justify-content: center;
+}
+
+.modal-footer .btn-primary {
+  background: #008DDA;
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: background 0.2s, color 0.2s;
+  padding: 12px 24px;
+  font-size: 1.1rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.modal-footer .btn-primary:hover {
+  background: #41C9E2;
+  color: #008DDA;
 }
