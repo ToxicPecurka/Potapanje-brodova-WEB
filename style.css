@@ -1,13 +1,20 @@
+/* Pozadina za celu stranicu */
 body {
-  background: #008DDA url('img/brod.png') no-repeat center bottom;
-  background-size: 50%; 
+  background-color: #41C9E2 !important; /* Svetloplava boja koja se podudara sa brodom */
+  background: 
+    url('img/brod.png') no-repeat center bottom, /* Slika broda na vrhu */
+    url("data:image/svg+xml,%3Csvg%20width%3D'52'%20height%3D'26'%20viewBox%3D'0%200%2052%2026'%20xmlns%3D'http%3A//www.w3.org/2000/svg'%3E%3Cg%20fill%3D'none'%20fill-rule%3D'evenodd'%3E%3Cg%20fill%3D'%23369af4'%20fill-opacity%3D'0.21'%3E%3Cpath%20d%3D'M10%2010c0-2.21-1.79-4-4-4-3.314%200-6-2.686-6-6h2c0%202.21%201.79%204%204%204%203.314%200%206%202.686%206%206%200%202.21%201.79%204%204%204%203.314%200%206%202.686%206%206%200%202.21%201.79%204%204%204v2c-3.314%200-6-2.686-6-6%200-2.21-1.79-4-4-4-3.314%200-6-2.686-6-6zm25.464-1.95l8.486%208.486-1.414%201.414-8.486-8.486%201.414-1.414z'%20/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat, /* Srednji sloj sa SVG-om */
+    #008DDA; /* Plava boja pozadine */
+  background-repeat: no-repeat, repeat, no-repeat; /* Slika broda se ne ponavlja, SVG se ponavlja */
+  background-position: center bottom, center, center; /* Pozicije slojeva */
+  background-size: contain, auto, cover; /* Prilagodite veličinu slojeva */
   min-height: 100vh;
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
 }
 
-/* Isključivanje overflow-a */
+
 body, html {
   overflow: hidden;
 }
@@ -253,6 +260,90 @@ button:active,
   margin-bottom: 20px; /* Dodajte razmak između naslova i input polja */
 }
 
+/* Stil za naslov stranice */
+h2#turnDisplay {
+  color: #008DDA; /* Plava boja iz palete */
+  font-weight: 800;
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  letter-spacing: 1px;
+}
+
+/* Stil za imena igrača */
+h4#player1, h4#player2 {
+  color: #008DDA; /* Plava boja iz palete */
+  font-weight: 700;
+  font-size: 1.8rem;
+  text-align: center;
+  margin-bottom: 1rem;
+  letter-spacing: 0.5px;
+}
+
+/* Stil za modalni prozor */
+.modal-content {
+  background-color: #F7EEDD; /* Svetla krem boja iz palete */
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+  background-color: #008DDA; /* Plava boja iz palete */
+  color: #fff; /* Bela boja za tekst */
+  border-bottom: none;
+  border-radius: 12px 12px 0 0;
+  padding: 1rem;
+}
+
+.modal-title {
+  font-weight: 800;
+  font-size: 1.8rem;
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+.modal-body {
+  color: #333; /* Neutralna boja za tekst */
+  font-size: 1.2rem;
+  text-align: center;
+  padding: 1.5rem;
+}
+
+.modal-footer {
+  background-color: #F7EEDD; /* Svetla krem boja */
+  border-top: none;
+  border-radius: 0 0 12px 12px;
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.modal-footer button {
+  font-size: 1rem;
+  font-weight: 600;
+  background-color: #008DDA; /* Plava boja */
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1.5rem;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.modal-footer button:hover {
+  background-color: #005F9E; /* Tamnija nijansa plave */
+}
+
+.btn-close {
+  background-color: #fff;
+  border: none;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+.btn-close:hover {
+  opacity: 1;
+}
+
 /* RESPONSIVE */
 @media (max-width: 1200px) {
   .game-board {
@@ -287,51 +378,4 @@ button:active,
     font-size: 1rem;
     padding: 7px 16px;
   }
-}
-
-/* Modal Styling */
-.modal-content {
-  background-color: #F7EEDD;
-  border-radius: 12px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
-}
-
-.modal-header {
-  background-color: #008DDA;
-  color: #fff;
-  border-bottom: none;
-  border-radius: 12px 12px 0 0;
-}
-
-.modal-title {
-  font-weight: 700;
-  font-size: 1.5rem;
-}
-
-.modal-body {
-  color: #008DDA;
-  font-size: 1.2rem;
-  text-align: center;
-}
-
-.modal-footer {
-  border-top: none;
-  justify-content: center;
-}
-
-.modal-footer .btn-primary {
-  background: #008DDA;
-  border: none;
-  color: #fff;
-  font-weight: 600;
-  border-radius: 8px;
-  transition: background 0.2s, color 0.2s;
-  padding: 12px 24px;
-  font-size: 1.1rem;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
-
-.modal-footer .btn-primary:hover {
-  background: #41C9E2;
-  color: #008DDA;
 }

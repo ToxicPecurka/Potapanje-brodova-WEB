@@ -13,19 +13,16 @@
     <div class="container py-4">
         <h2 id="turnDisplay" class="text-center my-3">Na potezu: </h2>
         <div class="row justify-content-center" style="margin-top: 120px;">
-            <!-- Player 1 -->
             <div class="col-12 col-md-6 d-flex flex-column align-items-center mb-4 mb-md-0">
                 <h4 id="player1" class="mb-3"></h4>
                 <div id="board1" class="game-board"></div>
             </div>
-            <!-- Player 2 -->
             <div class="col-12 col-md-6 d-flex flex-column align-items-center">
                 <h4 id="player2" class="mb-3"></h4>
                 <div id="board2" class="game-board"></div>
             </div>
         </div>
 
-        <!-- Modal za pobednika -->
 <div class="modal fade" id="winnerModal" tabindex="-1" aria-labelledby="winnerModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -34,7 +31,6 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zatvori"></button>
       </div>
       <div class="modal-body" id="winnerModalBody">
-        <!-- Ovde ide tekst o pobedniku -->
       </div>
       <div class="modal-footer">
     <button type="button" class="btn btn-primary" onclick="reload()">Nova igra</button>
@@ -43,6 +39,6 @@
   </div>
 </div>
 
-    </div>
+</div>
 </body>
 </html>
