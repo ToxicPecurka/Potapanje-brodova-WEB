@@ -379,7 +379,13 @@ h4#player1, h4#player2 {
 .table-image {
     max-width: 100%; /* Slika se prilagođava širini kontejnera */
     height: auto; /* Održava proporcije slike */
-    margin-top: 1rem;
+    margin-top: 1rem; /* Razmak između tabele i slike */
+    margin-bottom: 1rem; /* Razmak ispod slike */
+    display: block; /* Osigurava da slike budu blok elementi */
+    margin-left: auto; /* Centriranje slike horizontalno */
+    margin-right: auto; /* Centriranje slike horizontalno */
+    object-fit: contain; /* Osigurava da se cela slika vidi unutar prostora */
+    max-height: 300px; /* Ograničava maksimalnu visinu slike */
 }
 
 @media (max-width: 1200px) {
