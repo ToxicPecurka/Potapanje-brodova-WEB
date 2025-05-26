@@ -217,6 +217,8 @@ function matricaPrazna(matrix) {
     return true; 
 }
 
+let gameOver = false; // Dodata promenljiva za praćenje stanja igre
+
 function gameLoad() {
     let boardF = JSON.parse(localStorage.getItem("boardF"));
     let boardS = JSON.parse(localStorage.getItem("boardS"));
@@ -235,6 +237,7 @@ function gameLoad() {
 
     document.querySelectorAll("#board1 .cell").forEach(cell => {
         cell.addEventListener("click", () => {
+            if (gameOver) return; // Provera da li je igra završena
             if (playerNow === 2) {
                 const index = parseInt(cell.dataset.index);
                 const x = index % 10;
@@ -251,6 +254,7 @@ function gameLoad() {
                 prikaziBoard(board2, boardS);
                 updatePlayerTurnDisplay();
                 if (matricaPrazna(boardF)) {
+                    gameOver = true; // Postavi igru kao završenu
                     document.getElementById('winnerModalBody').textContent = localStorage.getItem('nameS') + " je pobedio!";
                     new bootstrap.Modal(document.getElementById('winnerModal')).show();
                 }
@@ -260,6 +264,7 @@ function gameLoad() {
 
     document.querySelectorAll("#board2 .cell").forEach(cell => {
         cell.addEventListener("click", () => {
+            if (gameOver) return; // Provera da li je igra završena
             if (playerNow === 1) {
                 const index = parseInt(cell.dataset.index);
                 const x = index % 10;
@@ -276,6 +281,7 @@ function gameLoad() {
                 prikaziBoard(board2, boardS);
                 updatePlayerTurnDisplay();
                 if (matricaPrazna(boardS)) {
+                    gameOver = true; // Postavi igru kao završenu
                     document.getElementById('winnerModalBody').textContent = localStorage.getItem('nameF') + " je pobedio!";
                     new bootstrap.Modal(document.getElementById('winnerModal')).show();
                 }
