@@ -12,16 +12,20 @@
 <body onload="gameLoad()" class="brodici">
     <div class="container py-4">
         <h2 id="turnDisplay" class="text-center my-3">Na potezu: </h2>
-        <div class="row justify-content-center">
+        <div class="row justify-content-center flex-column flex-md-row align-items-center">
+            <!-- Prvi igrač -->
             <div class="col-12 col-md-6 d-flex flex-column align-items-center mb-4 mb-md-0">
                 <h4 id="player1" class="mb-3"></h4>
                 <div id="board1" class="game-board"></div>
-                <img src="img/brod.png" alt="Ship 1" class="table-image mt-3">
+                <!-- Slika broda vidljiva samo na većim ekranima -->
+                <img src="img/brod.png" alt="Ship 1" class="table-image mt-3 d-none d-md-block">
             </div>
+            <!-- Drugi igrač -->
             <div class="col-12 col-md-6 d-flex flex-column align-items-center">
                 <h4 id="player2" class="mb-3"></h4>
                 <div id="board2" class="game-board"></div>
-                <img src="img/pirate_ship_transparent.png" alt="Ship 2" class="table-image mt-3">
+                <!-- Slika broda vidljiva samo na većim ekranima -->
+                <img src="img/pirate_ship_transparent.png" alt="Ship 2" class="table-image mt-3 d-none d-md-block">
             </div>
         </div>
         <div class="modal fade" id="winnerModal" tabindex="-1" aria-labelledby="winnerModalLabel" aria-hidden="true">

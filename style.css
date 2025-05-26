@@ -69,7 +69,7 @@ body, html {
 /* Global Button Styling */
 button,
 .btn-primary {
-  background: linear-gradient(135deg, #008DDA, #41C9E2);
+   background: linear-gradient(135deg, #008DDA, #41C9E2);
   border: none;
   color: #fff;
   font-weight: 600;
@@ -377,14 +377,10 @@ h4#player1, h4#player2 {
 }
 
 .table-image {
-    width: 350px; /* Fiksna širina za slike */
+    max-width: 100%; /* Slika se prilagođava širini kontejnera */
     height: auto; /* Održava proporcije slike */
     margin-top: 1rem;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
 }
-
 
 @media (max-width: 1200px) {
     .game-board {
@@ -421,26 +417,6 @@ h4#player1, h4#player2 {
     }
     h4#player1, h4#player2 {
         font-size: 1.5rem;
-    }
-}
-
-@media (max-width: 768px) {
-    .row.justify-content-center {
-        flex-direction: column; /* Postavlja elemente jedan ispod drugog */
-        align-items: center; /* Centriranje elemenata */
-    }
-
-    .col-12.col-md-6 {
-        width: 100%; /* Tabele zauzimaju punu širinu */
-        margin-bottom: 2rem; /* Dodaje razmak između tabela */
-    }
-
-    .game-board {
-        margin: 0 auto; /* Centriranje tabela */
-    }
-
-    .table-image {
-        margin: 1rem auto; /* Centriranje slika ispod tabela */
     }
 }
 
