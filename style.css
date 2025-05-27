@@ -260,7 +260,7 @@ button:active,
   font-weight: 800;
   color: #008DDA;
   margin-top: 0; /* Uklonjen margin-top */
-  margin-bottom: 40px; /* Razmak ispod naslova */
+  margin-bottom: 50px; /* Razmak ispod naslova */
   text-transform: uppercase;
   letter-spacing: 2px;
   position: relative; /* Dodato relativno pozicioniranje */
@@ -273,7 +273,7 @@ button:active,
 
 /* Podizanje input polja */
 .players {
-  margin-top: -50px; /* Podignite input polja prema gore */
+  margin-top: 0px; /* Podignite input polja prema gore */
 }
 
 .za_input h1 {
@@ -500,4 +500,5 @@ h4#player1, h4#player2 {
         font-size: 0.8rem;
         padding: 0.3rem 0.8rem;
     }
+    
 }
