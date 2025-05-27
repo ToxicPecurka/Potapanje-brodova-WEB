@@ -47,6 +47,21 @@ function createBoard(board) {
 }
 
 function SetupLoad() {
+
+    window.addEventListener("DOMContentLoaded", () => {
+    const bgMusic = new Audio("sounds/Pirate Songs  No Copyright Music.mp3"); // Putanja do audio fajla
+    bgMusic.loop = true; // Loop-ovanje muzike
+    bgMusic.volume = 0.1; // Prilagodite jačinu zvuka
+    bgMusic.play().catch(err => {
+        console.log("Browser blokira automatsko puštanje zvuka dok korisnik ne klikne.");
+    });
+
+    // Opcionalno: pusti muziku čim korisnik prvi put klikne bilo gde
+    document.body.addEventListener("click", () => {
+        if (bgMusic.paused) bgMusic.play();
+    }, { once: true });
+});
+
     let draggedShip = null;
     let draggedLength = 0;
     let isVertical = false;
@@ -219,6 +234,16 @@ function matricaPrazna(matrix) {
 
 let gameOver = false; // Dodata promenljiva za praćenje stanja igre
 
+const clickSound = new Audio("sounds/Cannon Ball Fire Sound Effect.mp3");
+const missSound = new Audio("sounds/BigWater Splash Sound Effect.mp3");
+function playOneSecond(sound) {
+  const audio = new Audio(sound);
+  audio.play();
+  setTimeout(() => {
+    audio.pause();
+    audio.currentTime = 0;
+  }, 2000);
+}
 function gameLoad() {
     let boardF = JSON.parse(localStorage.getItem("boardF"));
     let boardS = JSON.parse(localStorage.getItem("boardS"));
@@ -245,9 +270,11 @@ function gameLoad() {
                 if (boardF[y][x] !== 0 && boardF[y][x] !== 1) return;
 
                 if (boardF[y][x] === 1) {
+                    playOneSecond("sounds/Cannon Ball Fire Sound Effect.mp3");
                     boardF[y][x] = 2;
                 } else {
                     boardF[y][x] = -1;
+                    playOneSecond("sounds/Big Water Splash Sound Effect.mp3");
                     playerNow = 1;
                 }
                 prikaziBoard(board1, boardF);
@@ -256,7 +283,15 @@ function gameLoad() {
                 if (matricaPrazna(boardF)) {
                     gameOver = true; // Postavi igru kao završenu
                     document.getElementById('winnerModalBody').textContent = localStorage.getItem('nameS') + " je pobedio!";
-                    new bootstrap.Modal(document.getElementById('winnerModal')).show();
+                    const modal = new bootstrap.Modal(document.getElementById('winnerModal'));
+                    modal.show();
+
+                    // Dodaj event listener za dugme Close
+                    document.querySelector('.btn-close').addEventListener('click', () => {
+                        setTimeout(() => {
+                            reload(); // Poziva funkciju reload nakon 5 sekundi
+                        }, 5000);
+                    });
                 }
             }
         });
@@ -269,12 +304,15 @@ function gameLoad() {
                 const index = parseInt(cell.dataset.index);
                 const x = index % 10;
                 const y = Math.floor(index / 10);
+
                 if (boardS[y][x] !== 0 && boardS[y][x] !== 1) return;
 
                 if (boardS[y][x] === 1) {
+                    playOneSecond("sounds/Cannon Ball Fire Sound Effect.mp3");
                     boardS[y][x] = 2;
                 } else {
                     boardS[y][x] = -1;
+                    playOneSecond("sounds/Big Water Splash Sound Effect.mp3");
                     playerNow = 2;
                 }
                 prikaziBoard(board1, boardF);
@@ -283,13 +321,24 @@ function gameLoad() {
                 if (matricaPrazna(boardS)) {
                     gameOver = true; // Postavi igru kao završenu
                     document.getElementById('winnerModalBody').textContent = localStorage.getItem('nameF') + " je pobedio!";
-                    new bootstrap.Modal(document.getElementById('winnerModal')).show();
+                    const modal = new bootstrap.Modal(document.getElementById('winnerModal'));
+                    modal.show();
+
+                    // Dodaj event listener za dugme Close
+                    document.querySelector('.btn-close').addEventListener('click', () => {
+                        setTimeout(() => {
+                            reload(); // Poziva funkciju reload nakon 5 sekundi
+                        }, 5000);
+                    });
                 }
             }
         });
     });
 }
 
+
 function reload() {
     window.location.href = "pocetna.html";
 }
+
+
