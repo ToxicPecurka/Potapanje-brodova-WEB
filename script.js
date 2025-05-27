@@ -238,7 +238,7 @@ const clickSound = new Audio("sounds/Cannon Ball Fire Sound Effect.mp3");
 const missSound = new Audio("sounds/Big Water Splash Sound Effect.mp3");
 function playOneSecond(sound) {
   const audio = new Audio(sound);
-  audio.volume = 0.1; 
+  audio.volume = 0.1; // Postavljanje jačine zvuka
   audio.play();
   setTimeout(() => {
     audio.pause();
