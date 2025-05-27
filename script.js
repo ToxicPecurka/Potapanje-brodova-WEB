@@ -235,7 +235,7 @@ function matricaPrazna(matrix) {
 let gameOver = false; // Dodata promenljiva za praćenje stanja igre
 
 const clickSound = new Audio("sounds/Cannon Ball Fire Sound Effect.mp3");
-const missSound = new Audio("sounds/BigWater Splash Sound Effect.mp3");
+const missSound = new Audio("sounds/Big Water Splash Sound Effect.mp3");
 function playOneSecond(sound) {
   const audio = new Audio(sound);
   audio.play();
