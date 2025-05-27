@@ -186,7 +186,7 @@ button:active,
 }
 
 .cell.occupied {
-  background-color: #444; /* koristi se SAMO u setup fazi */
+  background-color: #444; 
 }
 
 .ship.vertical {

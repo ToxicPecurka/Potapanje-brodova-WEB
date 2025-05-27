@@ -186,7 +186,6 @@ function SetupLoad() {
         });
     }
 }
-
 function rotirajbrodove()
 {
     document.querySelectorAll(".ship").forEach(ship => {
